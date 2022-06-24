@@ -31,7 +31,7 @@ import { ProductService } from './app/DI-usefactory/product.service';
 import { FakeProductService } from './app/DI-usefactory/fake-product.service';
 import { LoggerService } from './app/DI-usefactory/logger.service';
 export const injectortoken = new InjectionToken<string>('DYN-SVC');
-export function resolveProductService(USE_FAKE,LoggerService,FUNC) {
+export function resolveProductService(USE_FAKE, LoggerService, FUNC) {
   return USE_FAKE
     ? new FakeProductService(FUNC)
     : new ProductService(LoggerService);
@@ -47,29 +47,31 @@ const routes: Routes = [
     // component: ExperimentalUsersComponent,
     //{ provide: injectortoken, useClass: ExperimentaluserService }
     providers: [],
-  },{
-    path:'products',
-    component:ProductsComponent,
-    providers:[
-      {provide: LoggerService, useClass: LoggerService },
-      { provide: 'USE_FAKE', useValue: true },
-      {   provide: 'FUNC',
-          useValue: () => {return 'hello';}},
-      {
-        provide:ProductService,
-        useFactory:resolveProductService,
-        deps:['USE_FAKE',LoggerService,'FUNC']
-      }
-  ]
-
   },
-    {  
-path:'host',
-loadChildren:()=>import('./app/DI-Host/common.route').then(route=>route.routes),
-
-
-
-     },
+  {
+    path: 'products',
+    component: ProductsComponent,
+    providers: [
+      { provide: LoggerService, useClass: LoggerService },
+      { provide: 'USE_FAKE', useValue: true },
+      {
+        provide: 'FUNC',
+        useValue: () => {
+          return 'hello';
+        },
+      },
+      {
+        provide: ProductService,
+        useFactory: resolveProductService,
+        deps: ['USE_FAKE', LoggerService, 'FUNC'],
+      },
+    ],
+  },
+  {
+    path: 'host',
+    loadChildren: () =>
+      import('./app/DI-Host/common.route').then((route) => route.routes),
+  },
   {
     path: 'home',
     component: HelloComponent,
@@ -120,7 +122,7 @@ bootstrapApplication(AppComponent, {
       FormsModule,
       RouterModule,
       RouterModule.forRoot(routes, { useHash: true }),
-      StoreModule.forRoot({ users: usersReducer }, {}),
+      StoreModule.forRoot({ users: usersReducer }),
       UserPipe
     ),
 
