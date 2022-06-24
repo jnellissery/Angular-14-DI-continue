@@ -30,6 +30,8 @@ import { ProductsComponent } from './app/DI-usefactory/products/products.compone
 import { ProductService } from './app/DI-usefactory/product.service';
 import { FakeProductService } from './app/DI-usefactory/fake-product.service';
 import { LoggerService } from './app/DI-usefactory/logger.service';
+import { EffectsModule } from '@ngrx/effects/src';
+import { UserEffectsService } from './app/store/user-effects.service';
 export const injectortoken = new InjectionToken<string>('DYN-SVC');
 export function resolveProductService(USE_FAKE, LoggerService, FUNC) {
   return USE_FAKE
@@ -123,6 +125,7 @@ bootstrapApplication(AppComponent, {
       RouterModule,
       RouterModule.forRoot(routes, { useHash: true }),
       StoreModule.forRoot({ users: usersReducer }),
+      EffectsModule.forRoot([UserEffectsService]),
       UserPipe
     ),
 
